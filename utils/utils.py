@@ -28,11 +28,15 @@ def import_streaming_data(parent_folder):
     
     #iterate over each .json file
     for file in glob.glob(parent_folder+file_name):
+        print("reading in file:'{}'...".format(file))
         temp = pd.read_json(file)
         _df = pd.concat([_df, temp])
+
+    #reset index
+    _df.reset_index(drop=True, inplace=True)
     
     #drop columns that are not required in this analysis
-    _df.drop(['ip_addr_decrypted','username', 'platform', 'user_agent_decrypted'], axis=1, inplace=True)
+    _df.drop(['ip_addr', 'platform'], axis=1, inplace=True)
     
     #rename columns so easier to read
     _df.rename(columns={'master_metadata_album_artist_name': 'artist',
